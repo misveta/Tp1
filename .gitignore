@@ -1,0 +1,12 @@
+.vs/
+**/.vs/
+Debug/
+Release/
+x64/
+x86/
+bin/
+obj/
+**/Debug/
+**/Release/
+**/x64/
+**/x86/
