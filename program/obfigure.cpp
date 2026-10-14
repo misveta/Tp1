@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <limits>
 
-obfigure::obfigure() : Base(1), a(1), b(1) {
+obfigure::obfigure() : Base(1), a(1), b(0) {
     std::cout << "obfigure: конструктор по умолчанию\n";
 }
 
@@ -40,22 +40,49 @@ void obfigure::setB(double x) {
 
 double obfigure::plob() const {
     if (type == 1)
-        return a*a*a;
-    if (type ==2 )
+        return a * a * a;
+    else if (type == 2)
         return a * b;
+    else if (type == 3)
+        return a * b * (1.0 / 3);
+    else if (type == 4)
+        return 3.14 * a * a * b;
+    else if (type == 5)
+        return a * b * (1.0 / 3) * 3.14 * a;
+    else if (type == 6)
+        return a * a * a * 3.14 * (4.0 / 3);
 }
 
 
 
 void obfigure::print() const {
     if (type == 1) {
-        std::cout << "\nКуб\n";
+        std::cout << "Куб\n";
         std::cout << "Сторона A: " << a << '\n';
     }
     else if (type == 2) {
-        std::cout << "\nПараллелепипед\n";
+        std::cout << "Параллелепипед\n";
         std::cout << "Площадь основания: " << a << '\n';
         std::cout << "Высота B: " << b << '\n';
+    }
+    else if (type == 3) {
+        std::cout << "Пирамида\n";
+        std::cout << "Площадь основания: " << a << '\n';
+        std::cout << "Высота B: " << b << '\n';
+    }
+    else if (type == 4) {
+        std::cout << "Цилиндр\n";
+        std::cout << "Радиус основания: " << a << '\n';
+        std::cout << "Высота B: " << b << '\n';
+    }
+    else if (type == 5) {
+        std::cout << "Конус\n";
+        std::cout << "Радиус основания: " << a << '\n';
+        std::cout << "Высота B: " << b << '\n';
+    }
+    else if (type == 6) {
+        std::cout << "Сфера\n";
+        std::cout << "Радиус: " << a << '\n';
     }
     else {
         std::cout << "Неизвестный тип фигуры!\n";
@@ -77,7 +104,7 @@ void obfigure::draw() const {
     }
 
     if (type == 1) {
-        std::cout << "Рисунок куба:\n";
+        std::cout << "Рисунок куба в плоском виде:\n";
         for (int i = 0; i < size; ++i) {
             for (int j = 0; j < size; ++j) {
                 std::cout << "* ";
@@ -85,14 +112,69 @@ void obfigure::draw() const {
             std::cout << '\n';
         }
     }
-    else {
-        std::cout << "Рисунок параллелепипеда:\n";
+    else if (type == 2) {
+        std::cout << "Рисунок параллелепипеда в плоском виде:\n";
 
-        for (int i = 0; i < b; i++) {
-            for (int j = 0; j < size; ++j) {
+        for (int i = 0; i < a; i++) {
+            for (int j = 0; j < b; ++j) {
                 std::cout << "*" << " ";
             }
-      
+
+            std::cout << '\n';
+        }
+    }
+    else if (type == 3) {
+        std::cout << "Рисунок пирамиды в плоском виде:\n";
+        int c = 0;
+        for (int i = b; i > 0; i--) {
+            for (int j = 0; j < i; ++j) {
+                std::cout << " ";
+            }
+            for (int i = 0; i <= c * 2; i++) {
+                std::cout << "*";
+            }
+            c++;
+            std::cout << '\n';
+        }
+    }
+    else if (type == 4) {
+        std::cout << "Рисунок цилиндр:\n";
+        for (int i = 0; i < a; ++i) {
+            for (int j = 0; j < b; ++j) {
+                std::cout << "* ";
+            }
+            std::cout << '\n';
+        }
+    }
+    else if (type == 5) {
+        std::cout << "Рисунок конуса в плоском виде:\n";
+        int c = 0;
+        for (int i = b; i > 0; i--) {
+            for (int j = 0; j < i; ++j) {
+                std::cout << " ";
+            }
+            for (int i = 0; i <= c * 2; i++) {
+                std::cout << "*";
+            }
+            c++;
+            std::cout << '\n';
+        }
+    }
+    else if (type == 6) {
+        std::cout << "Рисунок сферы в плоском виде:\n";
+        const int width = a;
+        const int length = static_cast<int>(a * 1.5);
+
+        for (int y = width; y >= -width; y -= 2) {
+            for (int x = -length; x <= length; ++x) {
+                double dist = std::sqrt(static_cast<double>(x * x + y * y));
+                if (std::fabs(dist - a) < 1.0) {
+                    std::cout << "*";
+                }
+                else {
+                    std::cout << " ";
+                }
+            }
             std::cout << '\n';
         }
     }
@@ -106,7 +188,7 @@ void obfigure::edit() {
         throw std::runtime_error("Нужно ввести число");
     setA(x);
 
-    if (type == 2) {
+    if (type == 2 || type == 3 || type == 4 || type == 5) {
         std::cout << "Введите новую высоту B: ";
         if (!(std::cin >> y))
             throw std::runtime_error("Нужно ввести число");
@@ -121,11 +203,19 @@ void obfigure::saveToFile(std::ostream& file) const {
     if (type == 1)
         name = "Куб";
     else if (type == 2)
-        name = "Параллелепипеда";
+        name = "Параллелепипед";
+    else if (type == 3)
+        name = "Пирамида";
+    else if (type == 4)
+        name = "Цилиндр";
+    else if (type == 5)
+        name = "Конус";
+    else if (type == 6)
+        name = "Сфера";
     else
         throw std::runtime_error("Неизвестный тип объемной фигуры!");
 
-    file << "Объемные " << name << ' '
+    file << "Объемные" << ' ' << name << ' '
         << a << ' ' << b << ' ' << plob() << '\n';
 
     if (!file)
@@ -133,24 +223,12 @@ void obfigure::saveToFile(std::ostream& file) const {
 }
 
 void obfigure::loadFromFile(std::ifstream& file) {
-    string category, name;
     double x, y, savedArea;
 
-    if (!(file >> category >> name >> x >> y >> savedArea))
+    if (!(file >> x >> y >> savedArea))
         throw std::runtime_error("Ошибка чтения объемной фигуры!");
-
-    if (category != "Объемные")
-        throw std::runtime_error("Неверная категория фигуры!");
-
-    if (name == "Куб")
-        type = 1;
-    else if (name == "Параллелепипеда")
-        type = 2;
-    else
-        throw std::runtime_error("Неизвестная объемной фигура!");
 
     setA(x);
     setB(y);
 
-   
 }

@@ -22,56 +22,7 @@ Keeper::~Keeper() {
     cout << "Keeper: деструктор\n";
 }
 
-//Keeper::Keeper(const Keeper& other) : arr(nullptr), size(0) {
-//    try {
-//        for (int i = 0; i < other.size; i++)
-//            add(other.arr[i]->clone());
-//    }
-//    catch (...) {
-//        for (int i = 0; i < size; i++)
-//            delete arr[i];
-//
-//        delete[] arr;
-//        throw;
-//    }
-//
-//    cout << "Keeper: конструктор копирования\n";
-//}
-//
-//Keeper& Keeper::operator=(const Keeper& other) {
-//    if (this == &other)
-//        return *this;
-//
-//    Base** temp = nullptr;
-//    int copied = 0;
-//
-//    try {
-//        if (other.size > 0)
-//            temp = new Base * [other.size];
-//
-//        for (; copied < other.size; copied++)
-//            temp[copied] = other.arr[copied]->clone();
-//    }
-//    catch (...) {
-//        for (int i = 0; i < copied; i++)
-//            delete temp[i];
-//
-//        delete[] temp;
-//        throw;
-//    }
-//
-//    for (int i = 0; i < size; i++)
-//        delete arr[i];
-//
-//    delete[] arr;
-//
-//    arr = temp;
-//    size = other.size;
-//
-//    cout << "Keeper: оператор присваивания\n";
-//
-//    return *this;
-//}
+
 
 void Keeper::add(Base* obj) {
     if (obj == nullptr)
@@ -190,34 +141,57 @@ void Keeper::loadAll(const char* filename) {
                 type = 1;
             else if (name == "Треугольник")
                 type = 2;
+            else if (name == "Трапеция")
+                type = 3;
+            else if (name == "Параллелограмм")
+                type = 4;
+            else if (name == "Прямоугольник")
+                type = 5;
+            else if (name == "Круг")
+                type = 6;
             else
                 throw runtime_error("Неизвестный тип фигуры!");
 
             obj = new plfigure(type, 1, 1);
         }
-        if (category == "Объемные") {
+        else if (category == "Объемные") {
             int type;
 
             if (name == "Куб")
                 type = 1;
-            else if (name == "Параллелепипед")
+            else if (name == "Параллелепипед") {
                 type = 2;
+            }
+            else if (name == "Пирамида")
+                type = 3;
+            else if (name == "Цилиндр") {
+
+                type = 4;
+            }
+            else if (name == "Конус")
+                type = 5;
+            else if (name == "Сфера")
+            {
+                type = 6;
+
+            }
             else
                 throw runtime_error("Неизвестный тип фигуры!");
 
             obj = new obfigure(type, 1, 1);
         }
         else {
+
             throw runtime_error("Неизвестная категория фигуры!");
         }
 
         try {
-       
+
             obj->loadFromFile(file);
             temp.add(obj);
         }
         catch (...) {
-         
+
             delete obj;
             throw;
         }
