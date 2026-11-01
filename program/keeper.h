@@ -10,8 +10,10 @@ private:
     int size;
 public:
     Keeper();
+    Keeper(const Keeper& other);
     ~Keeper();
 
+    Keeper& operator=(const Keeper& other);
     void add(Base* object);
     void remove(int index);
     void printAll() const;

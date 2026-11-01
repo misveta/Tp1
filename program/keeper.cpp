@@ -22,8 +22,86 @@ Keeper::~Keeper() {
     cout << "Keeper: деструктор\n";
 }
 
+Keeper::Keeper(const Keeper& other)
+{
+    size = other.size;
+    arr = nullptr;
+
+    if (size > 0)
+    {
+        arr = new Base * [size];
+
+        int i = 0;
+
+        try
+        {
+            for (; i < size; i++)
+            {
+                arr[i] = other.arr[i]->c();
+            }
+        }
+        catch (...)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                delete arr[j];
+            }
+
+            delete[] arr;
+            throw;
+        }
+    }
+
+    cout << "Вызван конструктор копирования Keeper" << endl;
+}
 
 
+Keeper& Keeper::operator=(const Keeper& other)
+{
+    if (this == &other)
+    {
+        return *this;
+    }
+
+    Base** newArr = nullptr;
+
+    if (other.size > 0)
+    {
+        newArr = new Base * [other.size];
+
+        int i = 0;
+
+        try
+        {
+            for (; i < other.size; i++)
+            {
+                newArr[i] = other.arr[i]->c();
+            }
+        }
+        catch (...)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                delete newArr[j];
+            }
+
+            delete[] newArr;
+            throw;
+        }
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        delete arr[i];
+    }
+
+    delete[] arr;
+
+    arr = newArr;
+    size = other.size;
+
+    return *this;
+}
 void Keeper::add(Base* obj) {
     if (obj == nullptr)
         throw invalid_argument("Нельзя добавить пустую фигуру!");

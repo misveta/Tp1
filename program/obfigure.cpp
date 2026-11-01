@@ -1,7 +1,7 @@
 #include "obfigure.h"
 #include <stdexcept>
 #include <limits>
-
+#include <cmath>
 obfigure::obfigure() : Base(1), a(1), b(0) {
     std::cout << "obfigure: конструктор по умолчанию\n";
 }
@@ -17,7 +17,10 @@ obfigure::obfigure(const obfigure& other)
     : Base(other), a(other.a), b(other.b) {
     std::cout << "obfigure: конструктор копирования\n";
 }
-
+Base* obfigure::c() const
+{
+    return new obfigure(*this);
+}
 obfigure::~obfigure() {
     std::cout << "obfigure: деструктор\n";
 }

@@ -21,6 +21,7 @@ public:
     virtual double plob () const = 0;
     virtual void saveToFile(ostream& file) const = 0;
     virtual void loadFromFile(ifstream& file) = 0;
+    virtual Base* c() const = 0;
 
     void setType(int type);
     int getType() const;

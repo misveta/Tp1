@@ -19,7 +19,7 @@ public:
 
     void setA(double a);
     void setB(double b);
-
+    Base* c() const override;
     double plob() const override;
     void print() const override;
     void draw() const override;

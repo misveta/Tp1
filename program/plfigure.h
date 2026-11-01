@@ -20,6 +20,7 @@ public:
     void setB(double b);
 
     double plob() const override;
+    Base* c() const override;
     void print() const override;
     void draw() const override;
     void edit() override;

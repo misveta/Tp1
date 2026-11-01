@@ -1,7 +1,7 @@
 #include "plfigure.h"
 #include <stdexcept>
 #include <limits>
-
+#include <cmath>
 plfigure::plfigure() : Base(1), a(1), b(1) {
     std::cout << "plfigure: конструктор по умолчанию\n";
 }
@@ -17,7 +17,10 @@ plfigure::plfigure(const plfigure& other)
     : Base(other), a(other.a), b(other.b) {
     std::cout << "plfigure: конструктор копирования\n";
 }
-
+Base* plfigure::c() const
+{
+    return new plfigure(*this);
+}
 plfigure::~plfigure() {
     std::cout << "plfigure: деструктор\n";
 }
